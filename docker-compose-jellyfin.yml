@@ -82,7 +82,7 @@ services:
       - WEBUI_PORT=6003
     volumes:
       - ./qbittorrent:/config
-      - /media/storage/downloadclient-downloads:/downloads
+      - /your/storage/downloadclient-downloads:/downloads
     ports:
       - 6881:6881
       - 6881:6881/udp
