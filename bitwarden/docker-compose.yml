@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  bitwarden:
+    image: bitwardenrs/server
+    restart: always
+    volumes:
+      - ./bw-data:/data
+    environment:
+      WEBSOCKET_ENABLED: 'true' # Required to use websockets
+      SIGNUPS_ALLOWED: 'fasle'   # set to false to disable signups
+    networks:
+      - local
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.bitwarden.rule=Host(`example.com`)"
+      - "traefik.http.routers.bitwarden.entrypoints=websecure"
+      - "traefik.http.routers.bitwarden.tls.certresolver=mytlschallenge"
+      - "traefik.http.services.bitwarden.loadbalancer.server.port=80"
+networks:
+  local:
+    external: true

@@ -1,0 +1,13 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/en/configs/settings
+layout:
+  Home Lab:
+    style: row
+    columns: 3
+  MEDIA:
+    style: row
+    columns: 3
+providers:
+  openweathermap: openweathermapapikey
+  weatherapi: weatherapiapikey

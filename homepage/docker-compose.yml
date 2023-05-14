@@ -1,0 +1,21 @@
+version: "3.3"
+services:
+  homepage:
+    image: ghcr.io/benphelps/homepage:latest
+    container_name: homepage
+    # environment:
+    #   PUID: 1000
+    #   PGID: 1000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.homepage.rule=Host(`homepage.local`)"
+      - "traefik.http.routers.homepagehomepage.entrypoints=web"
+      - "traefik.http.services.homepagehomepagehomepage.loadbalancer.server.port=3000"
+    volumes:
+      - ./config:/app/config # Make sure your local config directory exists
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - local
+networks:
+  local:
+    external: true

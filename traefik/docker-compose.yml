@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+  traefik:
+    image: "traefik:latest"
+    container_name: "traefik"
+    command:
+      - --log.level=warning
+      - --api.insecure=true
+      - --api.dashboard=true
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --certificatesresolvers.mytlschallenge.acme.tlschallenge=true
+      - --certificatesresolvers.mytlschallenge.acme.email=your@email.com
+      ## DNS
+      - --entrypoints.dnsovertls.address=:853/tcp
+      - --entrypoints.dns.address=:53/tcp
+      - --entrypoints.udpdns.address=:53/udp
+      ## UPD
+      - --entrypoints.jellyfin.address=:7359/udp
+      - --entrypoints.jelyfin.address=:1900/udp
+    labels:
+      - traefik.enable=true
+      # Dashboard
+      - traefik.http.routers.traefik.rule=Host(`traefik.local`)
+      # this is interesting - traefik is naming his api service somehow
+      - traefik.http.routers.traefik.service=api@internal
+      - traefik.http.services.traefik.loadbalancer.server.port=8080
+    networks:
+      - local
+    environment:
+      - TZ=TZ=Europe/Kiev
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "443:443"
+      - "853:853/tcp"
+      - "80:80"
+      - "7359:7359/udp"
+      - "1900:1900/udp"
+      #- "8080:8080"  # Don't do this in production!
+    volumes:
+      - "letsencrypt:/letsencrypt"
+      #- /etc/traefik:/etc/traefik
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+volumes:
+  letsencrypt:
+networks:
+  local:
+    external: true

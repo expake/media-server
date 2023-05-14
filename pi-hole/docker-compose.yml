@@ -1,0 +1,58 @@
+version: "3.8"
+services:
+  cloudflared:
+    container_name: cloudflared
+    image: visibilityspots/cloudflared:latest
+    restart: unless-stopped
+    networks:
+      - local
+  pihole:
+    restart: unless-stopped
+    container_name: pihole
+    image: pihole/pihole:latest
+    dns:
+      -  127.0.0.1
+    labels:
+      # Web interface on http
+      - "traefik.enable=true"
+      - "traefik.http.routers.pihole.entrypoints=web"
+      - "traefik.http.routers.pihole.rule=Host(`pi-hole.local`)"
+      - "traefik.http.services.pihole.loadbalancer.server.port=80"
+
+    # # DNS-over-TLS
+    #   - "traefik.tcp.routers.dnsovertls.rule=HostSNI(`dns.example.com`)"
+    #   - "traefik.tcp.routers.dnsovertls.entrypoints=dnsovertls"
+    #   - "traefik.tcp.routers.dnsovertls.tls.certresolver=mytlschallenge"
+    #   - "traefik.tcp.routers.dnsovertls.service=pihole"
+
+      # Normal DNS coming in on 53 TCP, no TLS
+      - "traefik.tcp.routers.dns.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.dns.entrypoints=dns"
+      - "traefik.tcp.routers.dns.service=pihole"
+
+      # Recieves traffic from both the TLS and non-TLS traefik routers
+      - "traefik.tcp.services.pihole.loadbalancer.server.port=53"
+
+      # Normal DNS coming in on 53 UDP
+      - "traefik.udp.routers.udpdns.entrypoints=udpdns"
+      - "traefik.udp.routers.udpdns.service=pihole"
+      - "traefik.udp.services.pihole.loadbalancer.server.port=53"
+    environment:
+      DNS1: cloudflared#5054
+      DNS2: '8.8.8.8'
+      IPv6: false
+      PUID: "1000"
+      PGID: "1000"
+      TZ: "Europe/Kiev"
+      WEBPASSWORD: "your_password"
+    volumes:
+      - "./etc-pihole:/etc/pihole"
+      - "./etc-dnsmasq.d:/etc/dnsmasq.d"
+    networks:
+      - local
+networks:
+  local:
+    external: true
+
+volumes:
+  letsencrypt:

@@ -1,0 +1,23 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/en/configs/bookmarks
+
+- Links:
+    - Github:
+        - abbr: GH
+          href: https://github.com/
+    - Oracle:
+        - abbr: Or
+          href: https://cloud.oracle.com/?region=eu-frankfurt-1
+    - CityHost:
+        - abbr: CH
+          href: https://cp.cityhost.ua/
+    - MI-Router:
+        - abbr: MI
+          href: http://10.10.30.8
+    - Reddit:
+        - abbr: RE
+          href: https://reddit.com/
+    - YouTube:
+        - abbr: YT
+          href: https://youtube.com/

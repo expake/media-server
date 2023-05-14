@@ -1,0 +1,118 @@
+- Home Lab:
+    - Portainer :
+        icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/portainer.png
+        href: http://port.local
+        description: Docker container orchestration
+        showStats: true
+        server: localhost
+        container: portainer
+        widget:
+          type: portainer
+          env: 2
+          url: http://portainer:9000
+          key: 
+    - Pi-Hole :
+        icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/pi-hole.png
+        href: http://pi-hole.local/admin
+        description: DNS Server
+        showStats: true
+        server: localhost
+        container: pihole
+        widget:
+          type: pihole
+          url: http://pihole
+          key: 
+    - Mikrotik :
+        icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/mikrotik.png
+        href: http://10.10.30.1
+        description: Mikrotik Home
+        widget:
+          type: mikrotik
+          url: http://10.10.30.1
+          username: 
+          password: 
+    - Traefik :
+        icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/traefik.png
+        href: http://traefik.local
+        description: HTTP reverse proxy and load balancer
+        showStats: true
+        server: localhost
+        container: traefik
+        widget:
+          type: traefik
+          url: http://traefik.local
+          #username: username # optional
+          #password: password # optional
+    - Speedtest Tracker :
+        icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/speedtest-tracker.png
+        href: http://speedtest.local
+        description: Speedtest Tracker
+        showStats: true
+        server: localhost
+        container: speedtest
+        widget:
+          type: speedtest
+          url: http://speedtest
+    - Coin Market Cap :
+        icon: https://1000logos.net/wp-content/uploads/2022/03/CoinMarketCap-logo.png
+        href: https://coinmarketcap.com/
+        widget:
+          type: coinmarketcap
+          currency: GBP # Optional
+          symbols: [BTC, ADA, ETH, DASH]
+          key:
+- MEDIA:
+    - Jackett :
+        icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/jackett.png
+        href: https://jac.expake.cx.ua
+        description: jackett
+        showStats: true
+        server: localhost
+        container: jackett
+    - Qbittorrent :
+        icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/qbittorrent.png
+        href: http://qbittorrent.local
+        description: qbittorrent
+        showStats: true
+        server: localhost
+        container: qbittorrent
+        widget:
+          type: qbittorrent
+          url: http://qbittorrent:6003
+          username:
+          password:
+    - Jellyfin :
+        icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/jellyfin.png
+        href: http://jellyfin.local
+        description: jellyfin
+        showStats: true
+        server: localhost
+        container: jellyfin
+        widget:
+          type: jellyfin
+          url: http://jellyfin:8096
+          key:
+          enableBlocks: true # optional, defaults to false
+          enableNowPlaying: true # optional, defaults to true
+    - Radarr :
+        icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/radarr.png
+        href: http://radarr.local
+        description: radarr
+        showStats: true
+        server: localhost
+        container: radarr
+        widget:
+          type: radarr
+          url: http://radarr:7878
+          key:
+    - Sonarr :
+        icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/sonarr.png
+        href: http://sonarr.local
+        description: sonarr
+        showStats: true
+        server: localhost
+        container: sonarr
+        widget:
+          type: sonarr
+          url: http://sonarr:8989
+          key:

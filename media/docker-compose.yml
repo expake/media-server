@@ -1,0 +1,126 @@
+---
+version: "2"
+services:
+  sonarr:
+    image: linuxserver/sonarr
+    networks:
+      - local
+    container_name: sonarr
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sonarr.rule=Host(`sonarr.local`)"
+      - "traefik.http.routers.sonarr.entrypoints=web"
+      - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Kiev
+      - UMASK_SET=022 #optional
+    volumes:
+      - ./sonarr:/config
+      #- /media/storage/TV:/tv
+      #- /media/storage/downloadclient-downloads:/downloads
+    restart: unless-stopped
+  searcharr:
+    container_name: searcharr
+    image: toddrob/searcharr:latest
+    networks:
+      - local
+    volumes:
+      - ./searcharr/data:/app/data
+      - ./searcharr/logs:/app/logs
+      - ./searcharr/settings.py:/app/settings.py
+    environment:
+      - TZ=Europe/Kiev
+    restart: unless-stopped
+
+  radarr:
+    image: linuxserver/radarr
+    networks:
+      - local
+    container_name: radarr
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.radarr.rule=Host(`radarr.local`)"
+      - "traefik.http.routers.radarr.entrypoints=web"
+      - "traefik.http.services.radarr.loadbalancer.server.port=7878"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Kiev
+      - UMASK_SET=022 #optional
+    volumes:
+      - ./radarr:/config
+      #- /media/storage/Films:/movies
+      #- /media/storage/downloadclient-downloads:/downloads
+    restart: unless-stopped
+
+  jackett:
+    image: linuxserver/jackett
+    container_name: jackett
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jackett.rule=Host(`jackett.local`)"
+      - "traefik.http.routers.jackett.entrypoints=web"
+      - "traefik.http.services.jackett.loadbalancer.server.port=9117"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Kiev
+      # - RUN_OPTS=run options here #optional
+    volumes:
+      - ./jackett/config:/config
+      #- /media/storage/downloadclient-downloads:/downloads
+    restart: unless-stopped
+    networks:
+      - local
+
+  qbittorrent:
+    image: linuxserver/qbittorrent
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.local`)"
+      - "traefik.http.routers.qbittorrent.entrypoints=web"
+      - "traefik.http.services.qbittorrent.loadbalancer.server.port=6003"
+    networks:
+      - local
+    container_name: qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Kiev
+      - UMASK_SET=022
+      - WEBUI_PORT=6003
+    volumes:
+      - ./qbittorrent:/config
+      #- /your/storage/downloadclient-downloads:/downloads
+    restart: unless-stopped
+
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.local`)"
+      - "traefik.http.routers.jellyfin.entrypoints=web"
+      - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
+      - "traefik.udp.routers.jellyfin.entrypoints=jellyfin"
+      - "traefik.udp.services.jellyfin.loadbalancer.server.port=7359"
+      - "traefik.udp.routers.jellyfin.entrypoints=jelyfin"
+      - "traefik.udp.services.jellyfin.loadbalancer.server.port=1900"
+    networks:
+      - local
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=TZ=Europe/Kiev
+      #- JELLYFIN_PublishedServerUrl=10.10.30.7 #optional
+    volumes:
+      - ./jellyfin:/config
+      #- /media/storage/TV:/data/tvshows
+      #- /media/storage/Films:/data/movies
+    restart: unless-stopped
+
+networks:
+  local:
+    external: true
